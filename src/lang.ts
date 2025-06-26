@@ -1,0 +1,37 @@
+export const i18n = {
+    en: {
+      login: 'Login',
+      language: 'EN',
+      home: 'Home',
+      shop: 'Shop',
+      aboutUs: 'About Us',
+      ourStory: 'Our Story',
+      ourProduct: 'Our Product',
+      contactUs: 'Contact Us',
+      faq: 'FAQ',
+      learn: 'Learn',
+      teaKnowledge: 'Tea Knowledge',
+      meditation: 'Meditation',
+      life: 'Life',
+      searchPlaceholder: 'Search...',
+      searchButton: 'Search',
+    },
+    zh: {
+      login: '登入',
+      language: '中',
+      home: '首頁',
+      shop: '商店',
+      aboutUs: '關於我們',
+      ourStory: '我們的故事',
+      ourProduct: '我們的產品',
+      contactUs: '聯絡我們',
+      faq: '常見問題',
+      learn: '學習',
+      teaKnowledge: '茶知識',
+      meditation: '冥想',
+      life: '生活',
+      searchPlaceholder: '搜尋...',
+      searchButton: '搜尋',
+    }
+  }
+  

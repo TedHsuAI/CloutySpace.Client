@@ -1,0 +1,18 @@
+/* 全局字体设置 */
+:root {
+  --font-zh: "Noto Sans TC", "微軟正黑體", "Microsoft JhengHei", sans-serif;
+  --font-en: "Poppins", "Montserrat",  sans-serif;
+}
+
+/* 全站預設英文字體為 Poppins，若無則回退到 Noto Sans TC */
+body, * {
+  font-family: var(--font-en);
+}
+
+/* 如有特殊語系需求可針對 zh 類別覆蓋 */
+.font-zh {
+  font-family: var(--font-zh);
+}
+.font-en {
+  font-family: var(--font-en);
+}
