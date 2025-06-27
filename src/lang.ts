@@ -15,6 +15,23 @@ export const i18n = {
       life: 'Life',
       searchPlaceholder: 'Search...',
       searchButton: 'Search',
+      // Core values section
+      coreToHeart: 'Our core to your heart',
+      originatedFromTaiwan: 'Originated from Taiwan',
+      originatedFromTaiwanDesc: 'Our products are all produced and processed in Taiwan.',
+      traceableSource: 'Traceable source',
+      traceableSourceDesc: 'Our tea and candle products are straight from the farm and their producers.',
+      relaxationAndWellness: 'Relaxation and Wellness',
+      relaxationAndWellnessDesc: 'Relax yourself with our tea and candle to help you restore your wellness.',
+      // Footer section
+      ourProducts: 'Our Products',
+      privacyPolicy: 'Privacy Policy',
+      refundReturns: 'Refund and Returns',
+      profile: 'Profile',
+      myAccount: 'My account',
+      checkout: 'Checkout',
+      followUs: 'Follow us',
+      address: '12F., No. 61, Sec. 2, Ronghua Rd., Xinzhuang Dist., New Taipei City, Taiwan',
     },
     zh: {
       login: '登入',
@@ -32,6 +49,23 @@ export const i18n = {
       life: '生活',
       searchPlaceholder: '搜尋...',
       searchButton: '搜尋',
+      // Core values section
+      coreToHeart: '我們的核心到您的心',
+      originatedFromTaiwan: '來自台灣',
+      originatedFromTaiwanDesc: '我們的產品全部在台灣生產和加工。',
+      traceableSource: '可追蹤來源',
+      traceableSourceDesc: '我們的茶葉和蠟燭產品直接來自農場和生產者。',
+      relaxationAndWellness: '放鬆與健康',
+      relaxationAndWellnessDesc: '用我們的茶和蠟燭放鬆自己，幫助您恢復健康。',
+      // Footer section
+      ourProducts: '我們的產品',
+      privacyPolicy: '隱私政策',
+      refundReturns: '退款與退貨',
+      profile: '個人檔案',
+      myAccount: '我的帳戶',
+      checkout: '結帳',
+      followUs: '追蹤我們',
+      address: '新北市新莊區榮華二路61號12樓',
     }
   }
   
