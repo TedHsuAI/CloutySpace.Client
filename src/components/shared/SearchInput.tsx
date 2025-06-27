@@ -10,25 +10,25 @@ interface SearchInputProps extends BaseProps, SearchProps {
 
 const sizeStyles = {
   sm: {
-    height: 'h-8',
+    height: 'h-6',
     width: 'w-8',
     expandedWidth: 'w-56',
     icon: 'text-sm',
-    input: 'px-2 py-2',
+    input: 'px-2 py-1 text-sm',
   },
   md: {
-    height: 'h-10',
+    height: 'h-8',
     width: 'w-10',
     expandedWidth: 'w-72',
-    icon: 'text-lg',
-    input: 'px-2 py-4',
+    icon: 'text-base',
+    input: 'px-2 py-2 text-sm',
   },
   lg: {
-    height: 'h-12',
+    height: 'h-10',
     width: 'w-12',
     expandedWidth: 'w-80',
-    icon: 'text-xl',
-    input: 'px-3 py-5',
+    icon: 'text-lg',
+    input: 'px-3 py-3 text-base',
   },
 }
 
@@ -77,21 +77,22 @@ export const ExpandableSearchInput = ({
           onKeyDown={handleKeyDown}
           className={`
             absolute left-0 top-1/2 -translate-y-1/2
-            ${styles.height} rounded-lg border-none outline-none
+            ${styles.height} border-none outline-none
             ${styles.input} bg-transparent cursor-pointer
             transition-all duration-500 ease-in-out
             placeholder:text-transparent
             focus:placeholder:text-gray-500
-            ${isExpanded ? `bg-white border border-gray-400 ${styles.expandedWidth} pl-10 shadow-lg z-50` : styles.width}
+            ${isExpanded ? `${styles.expandedWidth} pl-10 z-50` : `${styles.width}`}
           `}
           style={{
             zIndex: isExpanded ? 50 : 1,
+            lineHeight: 1.2,
           }}
           aria-label={lang === 'zh' ? '搜尋' : 'Search'}
         />
         <div
-          className="absolute left-3 pointer-events-none"
-          style={{ top: 'calc(50% + 2px)', zIndex: 51 }}
+          className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none flex items-center"
+          style={{ zIndex: 51 }}
         >
           <FaSearch className={`text-gray-600 ${styles.icon}`} />
         </div>
@@ -135,15 +136,16 @@ export const StandardSearchInput = ({
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={handleKeyDown}
           className={`
-            w-full ${styles.height} rounded-lg border border-gray-300 
-            ${styles.input} pl-10 pr-4
-            focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500
+            w-full ${styles.height} border-none outline-none
+            ${styles.input} pl-10 pr-4 bg-transparent
             transition-colors duration-200
+            flex items-center
           `}
+          style={{ lineHeight: 1.2 }}
           aria-label={lang === 'zh' ? '搜尋' : 'Search'}
         />
-        <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
-          <FaSearch className={`text-gray-400 ${styles.icon}`} />
+        <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center">
+          <FaSearch className={`text-gray-400 ${styles.icon}`} style={{ lineHeight: 1 }} />
         </div>
       </form>
     </div>

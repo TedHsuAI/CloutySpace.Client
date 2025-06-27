@@ -1,9 +1,10 @@
 // 組件導出
 export * from './sections'
 export * from './layouts'
+export * from './pages'
 
 // Features 組件
-export { LoginModal, TeaProductGrid } from './features'
+export { LoginModal, TeaProductGrid, ShopFilters, ProductCard, ProductGrid } from './features'
 export { ImageCarousel as FeatureImageCarousel } from './features'
 
 // Shared 組件

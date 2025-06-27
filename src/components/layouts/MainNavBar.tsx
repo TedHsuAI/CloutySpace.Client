@@ -80,7 +80,7 @@ const MainNavBar: FC<MainNavBarProps> = ({
         </div>
         
         {/* Search Input */}
-        <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+        <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center" style={{ height: '54px' }}>
           <SearchInput 
             lang={lang} 
             variant="expandable"

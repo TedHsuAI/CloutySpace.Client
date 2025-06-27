@@ -59,3 +59,131 @@ body, * {
   width: 300px;
   height: 300px;
 }
+
+/* 雙重範圍滑桿樣式 */
+.range-slider {
+  position: relative;
+  height: 20px;
+  margin: 16px 0;
+  max-width: 400px;
+  width: 100%;
+}
+
+/* RWD 響應式滑桿最大寬度 - 更嚴格的限制 */
+@media (max-width: 768px) {
+  .range-slider {
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 640px) {
+  .range-slider {
+    max-width: 280px;
+  }
+}
+
+@media (max-width: 480px) {
+  .range-slider {
+    max-width: 240px;
+  }
+}
+
+@media (max-width: 400px) {
+  .range-slider {
+    max-width: 220px;
+  }
+}
+
+@media (max-width: 360px) {
+  .range-slider {
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 320px) {
+  .range-slider {
+    max-width: 180px;
+  }
+}
+
+/* 額外保護：確保滑桿容器在極小螢幕上仍可用 */
+@media (max-width: 280px) {
+  .range-slider {
+    max-width: 160px;
+    margin: 12px 0;
+  }
+}
+
+.range-input {
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  top: 8px;
+  left: 0;
+  appearance: none;
+  background: transparent;
+  pointer-events: none;
+}
+
+.range-input::-webkit-slider-thumb {
+  appearance: none;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background: #374151;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  pointer-events: all;
+  margin-top: -4px;
+}
+
+.range-input::-moz-range-thumb {
+  appearance: none;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background: #374151;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  pointer-events: all;
+  margin-top: -4px;
+}
+
+.range-input::-webkit-slider-track {
+  appearance: none;
+  background: transparent;
+  height: 4px;
+}
+
+.range-input::-moz-range-track {
+  appearance: none;
+  background: transparent;
+  height: 4px;
+  border: none;
+}
+
+.range-input:focus {
+  outline: none;
+}
+
+.range-input:focus::-webkit-slider-thumb {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 0 0 2px rgba(55, 65, 81, 0.2);
+}
+
+.range-input:focus::-moz-range-thumb {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 0 0 2px rgba(55, 65, 81, 0.2);
+}
+
+/* 滑桿容器樣式 */
+.range-slider-container {
+  display: block;
+  width: 100%;
+}
+
+@media (max-width: 480px) {
+  .range-slider-container {
+    padding: 0;
+  }
+}

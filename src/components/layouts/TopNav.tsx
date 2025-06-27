@@ -3,6 +3,7 @@ import { FaFacebookF, FaInstagram, FaUser, FaGlobe } from 'react-icons/fa6'
 import { FaShoppingCart } from 'react-icons/fa'
 import { i18n } from '@/lang'
 import { LoginModal } from '@/components/features'
+import { useCart } from '@/contexts/CartContext'
 
 interface TopNavProps {
   lang: 'en' | 'zh'
@@ -11,6 +12,8 @@ interface TopNavProps {
 
 const TopNav: FC<TopNavProps> = ({ lang, toggleLang }) => {
   const [showLogin, setShowLogin] = useState(false)
+  const { getTotalItems } = useCart()
+  const totalItems = getTotalItems()
 
   return (
     <>
@@ -41,10 +44,16 @@ const TopNav: FC<TopNavProps> = ({ lang, toggleLang }) => {
             {/* 購物車按鈕 */}
             <div className="relative group flex items-center">
               <button
-                className="flex items-center justify-center text-gray-700 hover:text-black transition-colors bg-transparent border-none cursor-pointer"
+                className="flex items-center justify-center text-gray-700 hover:text-black transition-colors bg-transparent border-none cursor-pointer relative"
                 onClick={() => console.log('Go to cart')}
               >
                 <FaShoppingCart size={20} />
+                {/* 購物車數量 badge */}
+                {totalItems > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium min-w-[20px]">
+                    {totalItems > 99 ? '99+' : totalItems}
+                  </span>
+                )}
               </button>
               <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 text-sm text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap px-2 py-1 bg-white shadow rounded pointer-events-none z-10">
                 {lang === 'zh' ? '購物車' : 'Shopping Cart'}

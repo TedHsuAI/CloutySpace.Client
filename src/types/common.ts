@@ -16,11 +16,14 @@ export interface Product {
 }
 
 export interface TeaProduct {
-  key: 'i' | 'h' | 'm' | 's'
+  key: 'i' | 'h' | 'm' | 's' | 'g'
   price: number
   image: string
   name?: string
   description?: string
+  category?: string
+  format?: string
+  hasVariants?: boolean
 }
 
 // UI 相關類型
