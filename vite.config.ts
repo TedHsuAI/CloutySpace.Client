@@ -42,11 +42,22 @@ export default defineConfig({
         },
     },
     build: {
-        outDir: '../Cloutyspace.Server/wwwroot',
+        outDir: 'dist',
         emptyOutDir: true,
+        sourcemap: true,
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    vendor: ['react', 'react-dom'],
+                    router: ['react-router-dom']
+                }
+            }
+        }
     },
     server: {
+        host: isInDocker ? '0.0.0.0' : 'localhost',
         port: parseInt(process.env.DEV_SERVER_PORT || '5173'),
+        strictPort: true,
         proxy: {
             '/weatherforecast': {
                 target,
