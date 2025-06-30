@@ -1,79 +1,39 @@
 import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import fs from 'fs'
-import path from 'path'
-import child_process from 'child_process'
 import dotenv from 'dotenv'
 import UnoCSS from 'unocss/vite'
+
 dotenv.config()
 
-// 以下區段為 VS2022 生成用於產生 HTTPS 憑證與反向代理的設定，可依需求移除
-const isInDocker = process.env.DOCKER === 'true'
-
-const baseFolder = process.env.APPDATA
-    ? `${process.env.APPDATA}/ASP.NET/https`
-    : `${process.env.HOME}/.aspnet/https`
-
-const certificateName = 'cloutyspace.client'
-const certFile = path.join(baseFolder, `${certificateName}.pem`)
-const keyFile = path.join(baseFolder, `${certificateName}.key`)
-
-if (!isInDocker && (!fs.existsSync(certFile) || !fs.existsSync(keyFile))) {
-    const result = child_process.spawnSync(
-        'dotnet',
-        ['dev-certs', 'https', '--export-path', certFile, '--format', 'Pem', '--no-password'],
-        { stdio: 'inherit' }
-    )
-
-    if (result.status !== 0) {
-        throw new Error('Could not create certificate.')
-    }
-}
-
-const backendPort = process.env.ASPNETCORE_HTTPS_PORT || '5001'
-const target = `https://localhost:${backendPort}`
-
+// https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [react(), UnoCSS()],
-    resolve: {
-        alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url)),
-        },
-    },
-    build: {
-        outDir: 'dist',
-        emptyOutDir: true,
-        sourcemap: true,
-        rollupOptions: {
-            output: {
-                manualChunks: {
-                    vendor: ['react', 'react-dom'],
-                    router: ['react-router-dom']
-                }
-            }
-        }
-    },
-    server: {
-        host: isInDocker ? '0.0.0.0' : 'localhost',
-        port: parseInt(process.env.DEV_SERVER_PORT || '5173'),
-        strictPort: true,
-        proxy: {
-            '/weatherforecast': {
-                target,
-                secure: false,
-                changeOrigin: true,
-            },
-        },
-        ...(isInDocker
-            ? {}
-            : {
-                https: {
-                    key: fs.readFileSync(keyFile),
-                    cert: fs.readFileSync(certFile),
-                },
-            }),
-    },
-})
+  // 保留您原有的插件設定
+  plugins: [react(), UnoCSS()],
 
-// 移除 VS2022 專案不再使用的憑證產生程式碼
+  // 保留您原有的路徑別名設定
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
+
+  // 保留您原有的生產打包設定
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+    sourcemap: true,
+    // 我們已移除 rollupOptions.output.manualChunks 設定。
+    // 這個設定在 Docker 環境中有時會導致模組解析問題，
+    // 例如我們遇到的 'Could not resolve entry module "react-router-dom"'。
+    // 移除後，Vite 會使用其預設、高效的程式碼分割策略，這更為穩定。
+  },
+
+  // 'server' 的設定僅用於開發伺服器 (npm run dev)，不會影響生產打包 (npm run build)。
+  server: {
+    // 監聽所有網路介面，方便在開發時從其他裝置訪問
+    host: '0.0.0.0',
+    port: 5173,
+    strictPort: true,
+  },
+})

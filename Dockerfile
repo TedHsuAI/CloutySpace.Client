@@ -11,7 +11,8 @@ WORKDIR /app
 COPY package*.json ./
 
 # 安裝依賴
-RUN npm ci --only=production --silent
+# 在 builder 階段，我們需要開發依賴來執行 build
+RUN npm ci --silent
 
 # 複製源代碼
 COPY . .
@@ -23,7 +24,7 @@ RUN npm run build
 FROM nginx:alpine AS production
 
 # 複製 nginx 配置
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # 複製構建結果到 nginx 目錄
 COPY --from=builder /app/dist /usr/share/nginx/html
