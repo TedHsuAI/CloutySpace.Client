@@ -7,11 +7,11 @@ import honeyPetalImg from '@/assets/images/secondProduct/Honey_Petal-loose_leaf_
 import mountainMistImg from '@/assets/images/secondProduct/Mountain_Mist-loose_leaf_1_v2.webp'
 import giftSetImg from '@/assets/images/firstProduct/02-禮盒-2.png'
 
-// Import tea bag images (placeholder URLs - can be replaced with actual downloaded images)
-const islandRubyTeaBagImg = 'https://www.cloutyspace.com/wp-content/uploads/2023/07/Island_Ruby-tea_bag_1_v2.webp'
-const springSproutTeaBagImg = 'https://www.cloutyspace.com/wp-content/uploads/2023/07/Spring_Sprout-tea_bag_1_v2.webp'
-const honeyPetalTeaBagImg = 'https://www.cloutyspace.com/wp-content/uploads/2023/07/Honey_Petal-tea_bag_1_v2.webp'
-const mountainMistTeaBagImg = 'https://www.cloutyspace.com/wp-content/uploads/2023/07/Mountain_Mist-tea_bag_1_v2.webp'
+// Import tea bag images (local files)
+import islandRubyTeaBagImg from '@/assets/images/teaBags/Island_Ruby-tea_bag_1_v2.webp'
+import springSproutTeaBagImg from '@/assets/images/teaBags/Spring_Sprout-tea_bag_1_v2.webp'
+import honeyPetalTeaBagImg from '@/assets/images/teaBags/Honey_Petal-tea_bag_1_v2.webp'
+import mountainMistTeaBagImg from '@/assets/images/teaBags/Mountain_Mist-tea_bag_1_v2.webp'
 
 export const TEA_PRODUCT_NAMES = {
   i: { zh: '灣島紅玉', en: 'Island Ruby' },
