@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  # 開發環境
+  cloutyspace-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - DOCKER=true
+    command: npm run dev -- --host 0.0.0.0
+    profiles:
+      - dev
+
+  # 生產環境
+  cloutyspace-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    profiles:
+      - prod
+
+  # Nginx 反向代理 (可選，用於複雜部署)
+  nginx-proxy:
+    image: nginx:alpine
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./nginx-proxy.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - cloutyspace-prod
+    profiles:
+      - prod-ssl
+
+networks:
+  default:
+    name: cloutyspace-network
