@@ -7,13 +7,11 @@ import honeyPetalImg from '@/assets/images/secondProduct/Honey_Petal-loose_leaf_
 import mountainMistImg from '@/assets/images/secondProduct/Mountain_Mist-loose_leaf_1_v2.webp'
 import giftSetImg from '@/assets/images/firstProduct/02-禮盒-2.png'
 
-// Import tea bag images (使用本地圖片)
+// Import tea bag images (local files)
 import islandRubyTeaBagImg from '@/assets/images/teaBags/Island_Ruby-tea_bag_1_v2.webp'
+import springSproutTeaBagImg from '@/assets/images/teaBags/Spring_Sprout-tea_bag_1_v2.webp'
 import honeyPetalTeaBagImg from '@/assets/images/teaBags/Honey_Petal-tea_bag_1_v2.webp'
-
-// 對於缺少本地圖片的產品，暫時使用散茶圖片或外部 URL
-const springSproutTeaBagImg = springSproutImg // 暫時使用散茶圖片
-const mountainMistTeaBagImg = mountainMistImg // 暫時使用散茶圖片
+import mountainMistTeaBagImg from '@/assets/images/teaBags/Mountain_Mist-tea_bag_1_v2.webp'
 
 export const TEA_PRODUCT_NAMES = {
   i: { zh: '灣島紅玉', en: 'Island Ruby' },
