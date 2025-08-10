@@ -1,6 +1,12 @@
 import React, { useRef, useLayoutEffect, useState } from 'react'
 
-const MainNavBarButton: React.FC<{ text: string; onClick?: () => void }> = ({ text, onClick }) => {
+interface MainNavBarButtonProps {
+  text: string
+  onClick?: () => void
+  isActive?: boolean
+}
+
+const MainNavBarButton: React.FC<MainNavBarButtonProps> = ({ text, onClick, isActive = false }) => {
   const textRef = useRef<HTMLSpanElement>(null);
   const [textWidth, setTextWidth] = useState(0);
 
@@ -17,7 +23,7 @@ const MainNavBarButton: React.FC<{ text: string; onClick?: () => void }> = ({ te
           <span className="text" ref={textRef}>
             {text}
             <span
-              className="text-bg"
+              className={`text-bg ${isActive ? 'active' : ''}`}
               aria-hidden="true"
               style={{
                 width: textWidth ? `calc(${textWidth}px + 0.9em)` : undefined
@@ -69,7 +75,12 @@ const MainNavBarButton: React.FC<{ text: string; onClick?: () => void }> = ({ te
           transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
           pointer-events: none;
         }
-        .main-button:hover .text-bg {
+        .text-bg.active {
+          transform: translate(-50%, 0) scaleX(1);
+          background: #b8b8b8;
+          opacity: 0.8;
+        }
+        .main-button:hover .text-bg:not(.active) {
           transform: translate(-50%, 0) scaleX(1);
         }
         .main-button:hover .text {

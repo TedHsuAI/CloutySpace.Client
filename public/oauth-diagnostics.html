@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google OAuth 診斷工具</title>
+</head>
+<body>
+    <div style="padding: 20px;">
+        <h1>Google OAuth 診斷工具</h1>
+        
+        <div style="margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 8px;">
+            <h3>🔧 當前設定檢查</h3>
+            <div id="diagnostics"></div>
+        </div>
+
+        <div style="margin: 20px 0;">
+            <h3>📋 需要檢查的 Google Cloud Console 設定</h3>
+            <ol style="line-height: 1.8;">
+                <li><strong>已授權的 JavaScript 來源</strong>: 
+                    <br><code>http://localhost:5173</code>
+                    <br><code>http://10.192.170.7:5173</code> (如果使用網路存取)
+                </li>
+                <li><strong>已授權的重新導向 URI</strong>: 
+                    <br><code>http://localhost:5173</code>
+                    <br><code>http://10.192.170.7:5173</code>
+                </li>
+                <li><strong>OAuth 同意螢幕</strong>: 確認狀態為「測試」且您的 email 在測試使用者清單中</li>
+            </ol>
+        </div>
+
+        <script>
+            const diagnostics = document.getElementById('diagnostics');
+            
+            // 檢查當前環境
+            const currentUrl = window.location.href;
+            const origin = window.location.origin;
+            const clientId = "35839759120-90afmlogombmf5dotfnsp2rgm4n6dhfr.apps.googleusercontent.com";
+            
+            let html = `
+                <p><strong>當前 URL:</strong> ${currentUrl}</p>
+                <p><strong>Origin:</strong> ${origin}</p>
+                <p><strong>Client ID:</strong> ${clientId}</p>
+                <p><strong>瀏覽器:</strong> ${navigator.userAgent}</p>
+            `;
+            
+            // 檢查是否為 HTTPS (生產環境需要)
+            if (location.protocol === 'https:') {
+                html += '<p style="color: green;">✅ 使用 HTTPS</p>';
+            } else {
+                html += '<p style="color: orange;">⚠️ 使用 HTTP (開發環境 OK)</p>';
+            }
+            
+            // 檢查是否為 localhost
+            if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+                html += '<p style="color: green;">✅ 使用 localhost</p>';
+            } else {
+                html += `<p style="color: blue;">ℹ️ 使用其他主機: ${location.hostname}</p>`;
+            }
+            
+            diagnostics.innerHTML = html;
+            
+            console.log('診斷資訊:', {
+                currentUrl,
+                origin,
+                clientId,
+                protocol: location.protocol,
+                hostname: location.hostname,
+                port: location.port
+            });
+        </script>
+    </div>
+</body>
+</html>

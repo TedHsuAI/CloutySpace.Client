@@ -34,23 +34,3 @@ EXPOSE 80
 
 # 啟動 nginx
 CMD ["nginx", "-g", "daemon off;"]
-
-# 開發階段 (可選)
-FROM node:20-alpine AS development
-
-WORKDIR /app
-
-# 複製 package 文件
-COPY package*.json ./
-
-# 安裝所有依賴 (包括開發依賴)
-RUN npm install
-
-# 複製源代碼
-COPY . .
-
-# 暴露開發服務器端口
-EXPOSE 5173
-
-# 啟動開發服務器
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

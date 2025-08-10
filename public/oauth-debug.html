@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google OAuth Debug</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <h1>Google OAuth Debug</h1>
+    <p>Client ID: 35839759120-90afmlogombmf5dotfnsp2rgm4n6dhfr.apps.googleusercontent.com</p>
+    <p>Current URL: <span id="current-url"></span></p>
+    
+    <div id="g_id_onload"
+         data-client_id="35839759120-90afmlogombmf5dotfnsp2rgm4n6dhfr.apps.googleusercontent.com"
+         data-callback="handleCredentialResponse">
+    </div>
+    <div class="g_id_signin" data-type="standard"></div>
+    
+    <button onclick="testGoogleLogin()">Test Google Login</button>
+    
+    <div id="output"></div>
+
+    <script>
+        document.getElementById('current-url').textContent = window.location.href;
+        
+        function handleCredentialResponse(response) {
+            console.log("Encoded JWT ID token: " + response.credential);
+            document.getElementById('output').innerHTML = '<h3>Success!</h3><p>Token: ' + response.credential + '</p>';
+            
+            // Decode the JWT token
+            const tokenPayload = JSON.parse(atob(response.credential.split('.')[1]));
+            console.log('User info:', tokenPayload);
+            document.getElementById('output').innerHTML += '<h3>User Info:</h3><pre>' + JSON.stringify(tokenPayload, null, 2) + '</pre>';
+        }
+        
+        function testGoogleLogin() {
+            if (window.google) {
+                window.google.accounts.id.prompt();
+            } else {
+                alert('Google Identity Services not loaded');
+            }
+        }
+        
+        window.onload = function() {
+            console.log('Page loaded, Google object:', window.google);
+        }
+    </script>
+</body>
+</html>
