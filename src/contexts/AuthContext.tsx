@@ -95,33 +95,37 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = (credential: string) => {
     try {
+      // 📍 顯示原始 Google token (用於後端驗證)
+      console.log('🔐 Google Credential Token:', credential)
+      
       let decodedToken: GoogleJwtPayload
       
-      // 檢查是否為自訂的 base64 編碼格式
+      // 優先嘗試作為標準 JWT 解碼
       try {
-        // 嘗試解碼 base64 和 URI 編碼
-        const decodedBase64 = atob(credential)
-        const decodedURI = decodeURIComponent(decodedBase64)
-        const parsed = JSON.parse(decodedURI)
-        decodedToken = parsed
-        console.log('使用自訂編碼格式解碼成功')
+        decodedToken = jwtDecode<GoogleJwtPayload>(credential)
+        console.log('✅ 使用標準 JWT 解碼成功')
+        console.log('📋 解碼後的 Token Payload:', decodedToken)
       } catch {
+        // 如果不是標準 JWT，嘗試其他格式
         try {
-          // 嘗試直接 base64 解碼
+          // 嘗試解碼 base64 和 URI 編碼
           const decodedBase64 = atob(credential)
-          const parsed = JSON.parse(decodedBase64)
+          const decodedURI = decodeURIComponent(decodedBase64)
+          const parsed = JSON.parse(decodedURI)
           decodedToken = parsed
-          console.log('使用簡單 base64 解碼成功')
+          console.log('✅ 使用自訂編碼格式解碼成功')
         } catch {
           try {
-            // 嘗試直接 JSON 解析
+            // 嘗試直接 base64 解碼
+            const decodedBase64 = atob(credential)
+            const parsed = JSON.parse(decodedBase64)
+            decodedToken = parsed
+            console.log('✅ 使用簡單 base64 解碼成功')
+          } catch {
+            // 最後嘗試直接 JSON 解析
             const parsed = JSON.parse(credential)
             decodedToken = parsed
-            console.log('使用直接 JSON 解析成功')
-          } catch {
-            // 最後嘗試作為 JWT 解碼
-            decodedToken = jwtDecode<GoogleJwtPayload>(credential)
-            console.log('使用 JWT 解碼成功')
+            console.log('✅ 使用直接 JSON 解析成功')
           }
         }
       }

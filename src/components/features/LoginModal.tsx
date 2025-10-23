@@ -1,4 +1,5 @@
 import { FC, useCallback, useEffect, useState } from 'react'
+import { GoogleLogin, CredentialResponse } from '@react-oauth/google'
 import { BaseProps, LoginCredentials } from '@/types/common'
 import FloatingInput from '@/components/ui/FloatingInput'
 import GoogleMaterialButton from '@/components/ui/GoogleMaterialButton'
@@ -19,10 +20,11 @@ const LoginModal: FC<LoginModalProps> = ({
   onRegister,
   isLoading = false
 }) => {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, login: authLogin } = useAuth()
   const [formData, setFormData] = useState<LoginCredentials>({ email: '', password: '' }) // email field reused as username internally
   const [rememberMe, setRememberMe] = useState(false)
   const [errors, setErrors] = useState<Partial<LoginCredentials>>({})
+  const [showGoogleButton, setShowGoogleButton] = useState(false)
 
   useEffect(() => {
     if (isAuthenticated) onClose()
@@ -55,13 +57,30 @@ const LoginModal: FC<LoginModalProps> = ({
     onLogin?.(formData)
   }, [validateForm, onLogin, formData])
 
-  const handleGoogleLoginSuccess = () => {
-    onClose()
+  const handleGoogleSuccess = (credentialResponse: CredentialResponse) => {
+    console.log('✅ Google Login Success')
+    
+    if (credentialResponse.credential) {
+      // 這就是標準的 JWT token，可以直接傳給後端驗證
+      console.log('� Google JWT Token (ID Token):', credentialResponse.credential)
+      
+      // 調用 AuthContext 的 login
+      authLogin(credentialResponse.credential)
+      
+      // 關閉 modal
+      onClose()
+    } else {
+      console.error('❌ No credential received from Google')
+    }
+  }
+
+  const handleGoogleError = () => {
+    console.error('❌ Google Login Failed')
   }
 
   const handleGoogleLogin = () => {
-    console.log('Google login clicked')
-    // 這裡可以之後加入 Google 登入邏輯
+    console.log('🚀 Opening Google Login...')
+    setShowGoogleButton(true)
   }
 
   if (isAuthenticated) return null
@@ -143,12 +162,27 @@ const LoginModal: FC<LoginModalProps> = ({
           </div>
 
           <div className="w-full mt-4">
-            <GoogleMaterialButton 
-              lang={lang}
-              onClick={handleGoogleLogin}
-              disabled={isLoading}
-              className="w-full"
-            />
+            {showGoogleButton ? (
+              <div className="flex justify-center">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={handleGoogleError}
+                  useOneTap={false}
+                  theme="outline"
+                  size="large"
+                  width="356"
+                  text="continue_with"
+                  locale={lang === 'zh' ? 'zh_TW' : 'en'}
+                />
+              </div>
+            ) : (
+              <GoogleMaterialButton 
+                lang={lang}
+                onClick={handleGoogleLogin}
+                disabled={isLoading}
+                className="w-full"
+              />
+            )}
           </div>
         </form>
 
