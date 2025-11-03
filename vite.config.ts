@@ -46,6 +46,15 @@ export default defineConfig({
     headers: {
       'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
       'Cross-Origin-Embedder-Policy': 'unsafe-none'
+    },
+    // Proxy 設定：將 /api 請求代理到後端伺服器，繞過 CORS
+    proxy: {
+      '/api': {
+        target: 'http://136.117.227.188:8080',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path
+      }
     }
   },
 })

@@ -28,9 +28,9 @@ const GoogleMaterialButton: FC<GoogleMaterialButtonProps> = ({ lang, onClick, di
         <span style={{ display: 'none' }}>{text}</span>
       </div>
       <style>{`
-        .gsi-material-button {font-family:'Roboto',arial,sans-serif;font-size:14px;height:38px;letter-spacing:.25px;background:#fff;border:1px solid #747775;display:inline-flex;align-items:center;justify-content:center;padding:0 12px;cursor:pointer;transition:background-color .218s,border-color .218s,box-shadow .218s;position:relative;}
+        .gsi-material-button {font-family:'Roboto',arial,sans-serif;font-size:14px;height:38px;letter-spacing:.25px;background:#fff;border:1px solid #e5e5e5;display:inline-flex;align-items:center;justify-content:center;padding:0 12px;cursor:pointer;transition:background-color .218s,border-color .218s,box-shadow .218s;position:relative;}
         .gsi-material-button:disabled{cursor:default;background-color:#ffffff61;border-color:#1f1f1f1f}
-        .gsi-material-button:not(:disabled):hover{box-shadow:0 1px 2px 0 rgba(60,64,67,.30),0 1px 3px 1px rgba(60,64,67,.15)}
+        .gsi-material-button:not(:disabled):hover{box-shadow:0 1px 2px 0 rgba(60,64,67,.30),0 1px 3px 1px rgba(60,64,67,.15);border-color:#d4d4d4}
         .gsi-material-button:not(:disabled):hover .gsi-material-button-state{background-color:#303030;opacity:8%}
         .gsi-material-button:not(:disabled):active .gsi-material-button-state, .gsi-material-button:not(:disabled):focus .gsi-material-button-state{background-color:#303030;opacity:12%}
         .gsi-material-button-icon{height:20px;margin-right:12px;min-width:20px;width:20px}

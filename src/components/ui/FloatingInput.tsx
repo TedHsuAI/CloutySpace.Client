@@ -33,7 +33,7 @@ const FloatingInput: React.FC<FloatingInputProps> = ({ label, value, onChange, t
           font-size: 16px;
           width: 100%;
           border: none;
-          border-bottom: 2px solid #ccc;
+          border-bottom: 2px solid #e5e5e5;
           padding: 8px 0;
           background-color: transparent;
           outline: none;
@@ -44,7 +44,7 @@ const FloatingInput: React.FC<FloatingInputProps> = ({ label, value, onChange, t
           position: absolute;
           top: 0;
           left: 0;
-          color: #ccc;
+          color: #b8b8b8;
           transition: all 0.3s ease;
           pointer-events: none;
         }
@@ -53,7 +53,7 @@ const FloatingInput: React.FC<FloatingInputProps> = ({ label, value, onChange, t
         .input-container input:valid ~ .label {
           top: -20px;
           font-size: 13px;
-          color: #333;
+          color: #6b7280;
         }
 
         .input-container .underline {
@@ -62,7 +62,7 @@ const FloatingInput: React.FC<FloatingInputProps> = ({ label, value, onChange, t
           left: 0;
           height: 2px;
           width: 100%;
-          background-color: #333;
+          background-color: #a0a0a0;
           transform: scaleX(0);
           transition: all 0.3s ease;
         }

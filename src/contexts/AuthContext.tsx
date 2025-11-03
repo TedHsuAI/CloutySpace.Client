@@ -1,11 +1,17 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react'
-import { jwtDecode } from 'jwt-decode'
+import { authenticateWithGoogle } from '../services/authService'
+import type { AuthResponse } from '../types/auth'
 
 interface User {
   id: string
+  userId: string
   email: string
   name: string
+  userName: string
   picture?: string
+  memberLevel: number
+  isRegister: boolean
+  lastLoginAt: string
   given_name?: string
   family_name?: string
 }
@@ -13,7 +19,7 @@ interface User {
 interface AuthContextType {
   user: User | null
   token: string | null
-  login: (credential: string) => void
+  login: (credential: string) => Promise<void>
   logout: () => void
   isAuthenticated: boolean
   isLoading: boolean
@@ -21,15 +27,7 @@ interface AuthContextType {
   lastUserInfo: User | null
 }
 
-interface GoogleJwtPayload {
-  sub: string
-  email: string
-  name: string
-  picture?: string
-  given_name?: string
-  family_name?: string
-  exp: number
-}
+
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
@@ -72,20 +70,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     if (storedToken && storedUser) {
       try {
-        // 驗證 token 是否過期
-        const decodedToken = jwtDecode<GoogleJwtPayload>(storedToken)
-        const currentTime = Date.now() / 1000
-
-        if (decodedToken.exp && decodedToken.exp > currentTime) {
-          setToken(storedToken)
-          setUser(JSON.parse(storedUser))
-        } else {
-          // Token 過期，清除儲存的資料
-          localStorage.removeItem(TOKEN_KEY)
-          localStorage.removeItem(USER_KEY)
-        }
+        // 直接載入儲存的資料 (token 過期驗證交由後端處理)
+        setToken(storedToken)
+        setUser(JSON.parse(storedUser))
       } catch (error) {
-        console.error('Error validating stored token:', error)
+        console.error('Error loading stored auth data:', error)
         localStorage.removeItem(TOKEN_KEY)
         localStorage.removeItem(USER_KEY)
       }
@@ -93,68 +82,52 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsLoading(false)
   }, [])
 
-  const login = (credential: string) => {
+  const login = async (credential: string) => {
     try {
-      // 📍 顯示原始 Google token (用於後端驗證)
-      console.log('🔐 Google Credential Token:', credential)
+      console.log('🔐 開始 Google 登入驗證...')
       
-      let decodedToken: GoogleJwtPayload
+      // 呼叫後端 API 進行認證
+      const response: AuthResponse = await authenticateWithGoogle(credential)
       
-      // 優先嘗試作為標準 JWT 解碼
-      try {
-        decodedToken = jwtDecode<GoogleJwtPayload>(credential)
-        console.log('✅ 使用標準 JWT 解碼成功')
-        console.log('📋 解碼後的 Token Payload:', decodedToken)
-      } catch {
-        // 如果不是標準 JWT，嘗試其他格式
-        try {
-          // 嘗試解碼 base64 和 URI 編碼
-          const decodedBase64 = atob(credential)
-          const decodedURI = decodeURIComponent(decodedBase64)
-          const parsed = JSON.parse(decodedURI)
-          decodedToken = parsed
-          console.log('✅ 使用自訂編碼格式解碼成功')
-        } catch {
-          try {
-            // 嘗試直接 base64 解碼
-            const decodedBase64 = atob(credential)
-            const parsed = JSON.parse(decodedBase64)
-            decodedToken = parsed
-            console.log('✅ 使用簡單 base64 解碼成功')
-          } catch {
-            // 最後嘗試直接 JSON 解析
-            const parsed = JSON.parse(credential)
-            decodedToken = parsed
-            console.log('✅ 使用直接 JSON 解析成功')
-          }
-        }
-      }
+      console.log('✅ 後端認證成功:', response)
       
-      // 提取用戶資訊
+      // 組裝用戶資料
       const userData: User = {
-        id: decodedToken.sub,
-        email: decodedToken.email,
-        name: decodedToken.name,
-        picture: decodedToken.picture,
-        given_name: decodedToken.given_name,
-        family_name: decodedToken.family_name,
+        id: response.userId,
+        userId: response.userId,
+        email: response.email,
+        name: response.name,
+        userName: response.userName,
+        picture: response.picture,
+        memberLevel: response.memberLevel,
+        isRegister: response.isRegister,
+        lastLoginAt: response.lastLoginAt,
       }
 
       // 儲存到狀態
       setUser(userData)
-      setToken(credential)
+      setToken(response.accessToken)
       setHasEverLoggedIn(true)
       setLastUserInfo(userData)
 
-      // 儲存到 localStorage
-      localStorage.setItem(TOKEN_KEY, credential)
+      // 儲存到 localStorage (儲存後端的 accessToken)
+      localStorage.setItem(TOKEN_KEY, response.accessToken)
       localStorage.setItem(USER_KEY, JSON.stringify(userData))
       localStorage.setItem(LOGIN_HISTORY_KEY, 'true')
       localStorage.setItem(LAST_USER_KEY, JSON.stringify(userData))
 
-      console.log('用戶登入成功:', userData)
+      console.log('✅ 用戶登入成功:', userData)
+      
+      // 檢查是否為新註冊用戶
+      if (!response.isRegister) {
+        console.log('ℹ️ 偵測到新用戶，需要完成註冊流程')
+        // TODO: 導向註冊頁面完成註冊流程
+        // 目前註冊頁面尚未實作，先保留此邏輯
+      }
     } catch (error) {
-      console.error('登入失敗:', error)
+      console.error('❌ 登入失敗:', error)
+      // 拋出錯誤讓呼叫端處理
+      throw error
     }
   }
 

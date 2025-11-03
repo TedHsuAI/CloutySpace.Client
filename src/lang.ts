@@ -36,6 +36,11 @@ export const i18n = {
   or: 'or',
   notMemberYet: 'Not a member yet?',
   registerNow: 'Register now',
+  // LoginDropdown
+  welcomeBack: 'Welcome Back',
+  chooseLoginMethod: 'Choose Login Method',
+  chooseLoginMethodSubtitle: 'Sign In',
+  useEmailPassword: 'Use Email & Password',
   // Validation messages
   errorEmailRequired: 'Email is required',
   errorEmailInvalid: 'Please enter a valid email',
@@ -114,6 +119,11 @@ export const i18n = {
   or: '或',
   notMemberYet: '還不是會員？',
   registerNow: '立即註冊',
+  // LoginDropdown
+  welcomeBack: '歡迎回來',
+  chooseLoginMethod: '選擇登入方式',
+  chooseLoginMethodSubtitle: 'Sign In',
+  useEmailPassword: '使用信箱密碼登入',
   // Validation messages
   errorEmailRequired: '請輸入電子郵件',
   errorEmailInvalid: '請輸入有效的電子郵件',
