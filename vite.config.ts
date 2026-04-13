@@ -35,5 +35,26 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5173,
     strictPort: true,
+    // 添加 CORS 標頭，幫助解決跨域問題
+    cors: {
+      origin: true,
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+      credentials: true
+    },
+    // 添加安全標頭來處理 COOP 問題
+    headers: {
+      'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
+      'Cross-Origin-Embedder-Policy': 'unsafe-none'
+    },
+    // Proxy 設定：將 /api 請求代理到後端伺服器，繞過 CORS
+    proxy: {
+      '/api': {
+        target: 'http://136.117.227.188:8080',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path
+      }
+    }
   },
 })

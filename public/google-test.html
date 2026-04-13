@@ -1,0 +1,136 @@
+<!-- 簡易 Google OAuth 測試 -->
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google OAuth 快速測試</title>
+    <script src="https://accounts.google.com/gsi/client"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+        }
+        .error {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        .success {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Google OAuth 快速測試</h1>
+        
+        <p><strong>當前網址:</strong> <span id="currentUrl"></span></p>
+        <p><strong>客戶端 ID:</strong> 35839759120-90afmlogombmf5dotfnsp2rgm4n6dhfr.apps.googleusercontent.com</p>
+        
+        <hr>
+        
+        <h3>原生 Google Identity Services 測試</h3>
+        <div id="g_id_onload"
+             data-client_id="35839759120-90afmlogombmf5dotfnsp2rgm4n6dhfr.apps.googleusercontent.com"
+             data-callback="handleCredentialResponse"
+             data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin"
+             data-type="standard"
+             data-size="large"
+             data-theme="outline"
+             data-text="sign_in_with"
+             data-shape="rectangular"
+             data-logo_alignment="left">
+        </div>
+        
+        <hr>
+        
+        <h3>手動 API 測試</h3>
+        <button onclick="testGoogleApi()" style="padding: 10px 20px; margin: 5px;">測試 Google API 端點</button>
+        <button onclick="clearResults()" style="padding: 10px 20px; margin: 5px;">清除結果</button>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        // 顯示當前 URL
+        document.getElementById('currentUrl').textContent = window.location.href;
+        
+        let resultContainer = document.getElementById('results');
+        
+        function addResult(message, type = 'result') {
+            const div = document.createElement('div');
+            div.className = type;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}:</strong> ${message}`;
+            resultContainer.appendChild(div);
+        }
+        
+        function clearResults() {
+            resultContainer.innerHTML = '';
+        }
+        
+        // Google Identity Services 回調
+        function handleCredentialResponse(response) {
+            console.log('Google 認證成功:', response);
+            addResult('✅ Google 認證成功！', 'success');
+            addResult(`認證令牌: ${response.credential.substring(0, 50)}...`, 'result');
+            
+            // 解析 JWT
+            try {
+                const payload = JSON.parse(atob(response.credential.split('.')[1]));
+                addResult(`用戶資訊: ${payload.name} (${payload.email})`, 'success');
+            } catch (error) {
+                addResult(`JWT 解析失敗: ${error.message}`, 'error');
+            }
+        }
+        
+        // 測試 Google API 端點
+        async function testGoogleApi() {
+            addResult('開始測試 Google API 端點...', 'result');
+            
+            const endpoints = [
+                'https://www.googleapis.com/oauth2/v1/userinfo',
+                'https://www.googleapis.com/oauth2/v2/userinfo',
+                'https://www.googleapis.com/oauth2/v3/userinfo',
+                'https://openidconnect.googleapis.com/v1/userinfo'
+            ];
+            
+            for (const endpoint of endpoints) {
+                try {
+                    const response = await fetch(endpoint, {
+                        method: 'HEAD',
+                        mode: 'no-cors'
+                    });
+                    addResult(`✅ ${endpoint} - 可達`, 'success');
+                } catch (error) {
+                    addResult(`❌ ${endpoint} - 失敗: ${error.message}`, 'error');
+                }
+            }
+            
+            addResult('API 測試完成', 'result');
+        }
+        
+        // 初始檢查
+        addResult('頁面已載入，準備進行測試', 'result');
+        addResult(`當前來源: ${window.location.origin}`, 'result');
+    </script>
+</body>
+</html>

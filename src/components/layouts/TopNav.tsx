@@ -4,6 +4,7 @@ import { FaShoppingCart } from 'react-icons/fa'
 import { i18n } from '@/lang'
 import { LoginModal } from '@/components/features'
 import { useCart } from '@/contexts/CartContext'
+import { useAuth } from '@/hooks'
 
 interface TopNavProps {
   lang: 'en' | 'zh'
@@ -13,7 +14,18 @@ interface TopNavProps {
 const TopNav: FC<TopNavProps> = ({ lang, toggleLang }) => {
   const [showLogin, setShowLogin] = useState(false)
   const { getTotalItems } = useCart()
+  const { user, isAuthenticated, logout } = useAuth()
   const totalItems = getTotalItems()
+
+  const handleUserMenuToggle = () => {
+    if (isAuthenticated) {
+      // 如果已登入，直接登出
+      logout()
+    } else {
+      // 如果未登入，顯示登入 Modal
+      setShowLogin(true)
+    }
+  }
 
   return (
     <>
@@ -56,20 +68,28 @@ const TopNav: FC<TopNavProps> = ({ lang, toggleLang }) => {
                 )}
               </button>
               <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 text-sm text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap px-2 py-1 bg-white shadow rounded pointer-events-none z-10">
-                {lang === 'zh' ? '購物車' : 'Shopping Cart'}
+                {i18n[lang].shoppingCart}
               </div>
             </div>
 
-            {/* 登入按鈕 */}
+            {/* 用戶頭像 / 登入按鈕 */}
             <div className="relative group flex items-center">
               <button
                 className="flex items-center justify-center text-gray-700 hover:text-black transition-colors bg-transparent border-none cursor-pointer"
-                onClick={() => setShowLogin(true)}
+                onClick={handleUserMenuToggle}
               >
-                <FaUser size={20} />
+                {isAuthenticated && user?.picture ? (
+                  <img
+                    src={user.picture}
+                    alt={user.name || i18n[lang].user}
+                    className="w-6 h-6 rounded-full object-cover"
+                  />
+                ) : (
+                  <FaUser size={20} />
+                )}
               </button>
               <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 text-sm text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap px-2 py-1 bg-white shadow rounded pointer-events-none z-10">
-                {i18n[lang].login}
+                {isAuthenticated ? (user?.name || i18n[lang].logout) : i18n[lang].login}
               </div>
             </div>
 
@@ -77,7 +97,7 @@ const TopNav: FC<TopNavProps> = ({ lang, toggleLang }) => {
             <button
               className="flex items-center justify-center text-gray-700 hover:text-black transition-colors bg-transparent border-none cursor-pointer gap-1 min-w-[32px]"
               onClick={toggleLang}
-              title={lang === 'zh' ? '切換語言' : 'Switch Language'}
+              title={i18n[lang].switchLanguage}
             >
               <FaGlobe size={20} />
               <span className="text-xs w-4 text-center inline-block">

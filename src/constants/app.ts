@@ -6,7 +6,7 @@ export const APP_VERSION = '1.0.0'
 export const SUPPORTED_LANGUAGES = ['en', 'zh'] as const
 
 // API 相關常量
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ''
 export const API_TIMEOUT = 10000
 
 // 本地儲存鍵值

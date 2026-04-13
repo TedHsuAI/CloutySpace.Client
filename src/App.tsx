@@ -1,55 +1,51 @@
 // 完整應用程式測試
-import { useState } from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import AppLayout from '@/AppLayout'
 import type { Language } from '@/types/common'
 import { STORAGE_KEYS } from '@/constants/app'
 import { useLocalStorage } from '@/hooks'
 import { Footer, MainNavBar, TopNav } from '@/components/layouts'
 import { ProductGallery, CoreValuesSection, BrandStory, ProductShowcase } from '@/components/sections'
-import { ShopPage } from '@/components/pages'
+import { ShopPage, AboutPage, LearnPage, GoogleTestPage } from '@/components/pages'
 import { CartProvider } from '@/contexts/CartContext'
+
+// 首頁組件
+const HomePage = ({ lang }: { lang: Language }) => (
+  <main className="pt-14">
+    <ProductShowcase lang={lang} />
+    <ProductGallery lang={lang} />
+    <CoreValuesSection lang={lang} />
+    <BrandStory lang={lang} />
+  </main>
+)
 
 function App() {
   const [lang, setLang] = useLocalStorage<Language>(STORAGE_KEYS.LANGUAGE, 'en')
-  const [currentPage, setCurrentPage] = useState<string>('/')
   
   const toggleLang = () => {
     const newLang: Language = lang === 'en' ? 'zh' : 'en'
     setLang(newLang)
   }
-
-  const handleNavClick = (path: string) => {
-    setCurrentPage(path)
-  }
-
-  const renderMainContent = () => {
-    switch (currentPage) {
-      case '/shop':
-        return <ShopPage lang={lang} />
-      case '/':
-      default:
-        return (
-          <main className="pt-14">
-            <ProductShowcase lang={lang} />
-            <ProductGallery lang={lang} />
-            <CoreValuesSection lang={lang} />
-            <BrandStory lang={lang} />
-          </main>
-        )
-    }
-  }
   
   return (
-    <CartProvider>
-      <AppLayout>
-        <TopNav lang={lang} toggleLang={toggleLang} />
-        <MainNavBar lang={lang} onNavClick={handleNavClick} />
-        
-        {renderMainContent()}
-        
-        <Footer lang={lang} />
-      </AppLayout>
-    </CartProvider>
+    <Router>
+      <CartProvider>
+        <AppLayout>
+          <TopNav lang={lang} toggleLang={toggleLang} />
+          <MainNavBar lang={lang} />
+          
+          <Routes>
+            <Route path="/" element={<HomePage lang={lang} />} />
+            <Route path="/shop" element={<ShopPage lang={lang} />} />
+            <Route path="/about" element={<AboutPage lang={lang} />} />
+            <Route path="/learn" element={<LearnPage lang={lang} />} />
+            <Route path="/test-google" element={<GoogleTestPage lang={lang} />} />
+          </Routes>
+          
+          <Footer lang={lang} />
+        </AppLayout>
+      </CartProvider>
+    </Router>
   )
 }
 

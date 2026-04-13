@@ -1,5 +1,7 @@
-import { createContext, useContext, useState, ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { TeaProduct } from '@/types/common'
+
+const CART_STORAGE_KEY = 'cloutyspace_cart'
 
 interface CartItem extends TeaProduct {
   quantity: number
@@ -29,7 +31,25 @@ interface CartProviderProps {
 }
 
 export const CartProvider = ({ children }: CartProviderProps) => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([])
+  // Initialize cart from localStorage
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
+    try {
+      const storedCart = localStorage.getItem(CART_STORAGE_KEY)
+      return storedCart ? JSON.parse(storedCart) : []
+    } catch (error) {
+      console.error('Failed to load cart from localStorage:', error)
+      return []
+    }
+  })
+
+  // Persist cart to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems))
+    } catch (error) {
+      console.error('Failed to save cart to localStorage:', error)
+    }
+  }, [cartItems])
 
   const addToCart = (product: TeaProduct) => {
     setCartItems(prev => {
