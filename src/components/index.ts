@@ -5,7 +5,6 @@ export * from './pages'
 
 // Features 組件
 export { LoginModal, TeaProductGrid, ShopFilters, ProductCard, ProductGrid } from './features'
-export { ImageCarousel as FeatureImageCarousel } from './features'
 
 // Shared 組件
 export { SearchInput, ExpandableSearchInput, StandardSearchInput } from './shared'

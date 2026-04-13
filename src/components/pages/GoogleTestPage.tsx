@@ -1,7 +1,7 @@
 import { FC, useState } from 'react'
 import type { Language } from '@/types/common'
 import { useAuth } from '@/hooks'
-import CustomGoogleLoginButton from '@/components/ui/CustomGoogleLoginButton'
+import GoogleLoginButton from '@/components/ui/GoogleLoginButton'
 
 interface GoogleTestPageProps {
   lang: Language
@@ -77,7 +77,7 @@ const GoogleTestPage: FC<GoogleTestPageProps> = ({ lang }) => {
             <div className="space-y-4">
               <p className="text-gray-600">尚未登入</p>
               <div className="max-w-xs">
-                <CustomGoogleLoginButton 
+                <GoogleLoginButton 
                   lang={lang}
                   onSuccess={() => addTestResult('✅ Google 登入成功！')}
                   onError={() => addTestResult('❌ Google 登入失敗')}
